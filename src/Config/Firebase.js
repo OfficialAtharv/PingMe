@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut} from "firebase/auth";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
 import { toast } from "react-toastify";
 
@@ -45,17 +45,24 @@ const signup = async (username, email, password) => {
     console.log("Empty chats initialized in Firestore");
   } catch (err) {
     console.error(" Signup error:", err.code, err.message);
-    toast.error(err.code + " - " + err.message);
+    toast.error(err.code.split('/')[1].split('-').join(" "));
   }
 };
 console.log("Current user in auth:", auth.currentUser);
 const login = async (email, password) => {
   try {
-    console.log("Trying to log in user:", email);
+    await signInWithEmailAndPassword(auth, email, password);
   } catch (err) {
     console.error("Login error:", err.code, err.message);
-    toast.error(err.code + " - " + err.message);
+    toast.error(err.code.split('/')[1].split('-').join(" "));
+  }
+}
+const logout = async () => {
+  try {
+    await signOut(auth);
+  } catch (err) {
+    toast.error(err.code.split('/')[1].split('-').join(" "));
   }
 }
 
-export { signup };
+export { signup,login,logout,auth,db };
