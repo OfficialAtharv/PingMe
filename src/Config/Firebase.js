@@ -40,7 +40,7 @@ const signup = async (username, email, password) => {
     console.log("User profile saved in Firestore");
 
     await setDoc(doc(db, "userChats", user.uid), {
-      ChatData: []
+      ChatsData: []
     });
     console.log("Empty chats initialized in Firestore");
   } catch (err) {
