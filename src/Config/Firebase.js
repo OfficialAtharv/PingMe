@@ -1,8 +1,20 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut} from "firebase/auth";
-import { getFirestore, setDoc, doc } from "firebase/firestore";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import {
+  getFirestore,
+  setDoc,
+  doc,
+  collection,
+  query,
+} from "firebase/firestore";
 import { toast } from "react-toastify";
-
+import { sendPasswordResetEmail } from "firebase/auth";
+import { where, getDocs } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCYtqJ4D0hqA-yb3WLHcuGixtw0QNdmHBY",
@@ -11,9 +23,8 @@ const firebaseConfig = {
   projectId: "pingme-5c885",
   storageBucket: "pingme-5c885.firebasestorage.app",
   messagingSenderId: "599810553244",
-  appId: "1:599810553244:web:55e3886656cc79cf894459"
+  appId: "1:599810553244:web:55e3886656cc79cf894459",
 };
-
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -27,7 +38,6 @@ const signup = async (username, email, password) => {
 
     console.log("User created successfully:", user);
 
-   
     await setDoc(doc(db, "users", user.uid), {
       id: user.uid,
       username: username.toLowerCase(),
@@ -35,17 +45,17 @@ const signup = async (username, email, password) => {
       name: "",
       avatar: "",
       bio: "Hey testing",
-      lastseen: Date.now()
+      lastseen: Date.now(),
     });
     console.log("User profile saved in Firestore");
 
     await setDoc(doc(db, "userChats", user.uid), {
-      ChatsData: []
+      ChatsData: [],
     });
     console.log("Empty chats initialized in Firestore");
   } catch (err) {
     console.error(" Signup error:", err.code, err.message);
-    toast.error(err.code.split('/')[1].split('-').join(" "));
+    toast.error(err.code.split("/")[1].split("-").join(" "));
   }
 };
 console.log("Current user in auth:", auth.currentUser);
@@ -54,15 +64,34 @@ const login = async (email, password) => {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (err) {
     console.error("Login error:", err.code, err.message);
-    toast.error(err.code.split('/')[1].split('-').join(" "));
+    toast.error(err.code.split("/")[1].split("-").join(" "));
   }
-}
+};
 const logout = async () => {
   try {
     await signOut(auth);
   } catch (err) {
-    toast.error(err.code.split('/')[1].split('-').join(" "));
+    toast.error(err.code.split("/")[1].split("-").join(" "));
   }
-}
+};
 
-export { signup,login,logout,auth,db };
+const resetpassword = async (email) => {
+  try {
+    if (!email) {
+      toast.error("Please enter your email");
+      return;
+    }
+
+    await sendPasswordResetEmail(auth, email);
+    toast.success("Password reset email sent successfully! Check your inbox.");
+  } catch (err) {
+    console.error("Error in password reset:", err);
+    if (err.code === "auth/user-not-found") {
+      toast.error("No account found with that email.");
+    } else {
+      toast.error(err.code.split("/")[1].split("-").join(" "));
+    }
+  }
+};
+
+export { signup, login, logout, auth, db, resetpassword };

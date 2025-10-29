@@ -1,15 +1,15 @@
-.login{
+.login {
   min-height: 100vh;
   background: url(/background.png) no-repeat;
   background-size: cover;
-  display: flex;  
+  display: flex;
   align-items: center;
   justify-content: space-evenly;
 }
-.login .logo{
-  width: max(20vw,200px);
+.login .logo {
+  width: max(20vw, 200px);
 }
-.loginform{
+.loginform {
   background-color: white;
   padding: 20px 40px;
   display: flex;
@@ -17,43 +17,54 @@
   gap: 20px;
   border-radius: 10px;
 }
-.loginform h2{
- font-weight: 400;
- text-align: center;
- color: #077EFF;
+.loginform h2 {
+  font-weight: 400;
+  text-align: center;
+  color: #077eff;
 }
-.form-input{
+.form-input {
   padding: 8px 10px;
   border: 1px solid c9c9c9c;
   border-radius: 4px;
-  outline: #077EFF;
+  outline: #077eff;
 }
-.loginform button{
+.loginform button {
   padding: 10px;
-  background-color: #077EFF;
+  background-color: #077eff;
   color: white;
   border: none;
   font-size: 18px;
   border-radius: 4px;
   cursor: pointer;
 }
-.loginterm{
+.loginterm {
   display: flex;
   gap: 5px;
   font-size: 15px;
   color: #808080;
 }
-.loginforgot{
+.loginforgot {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
-.logintoggle{
+.logintoggle {
   font-size: 15px;
   color: #5c5c5c;
 }
-.logintoggle span{
+.logintoggle span {
   font-weight: 500;
-  color: #077EFF;
+  color: #077eff;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .login {
+    flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+  }
+  .login .logo {
+    width: 60vw;
+  }
 }

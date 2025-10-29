@@ -1,34 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import './ProfileUpdate.css';
-import assets from '../../assets/assets';
-import { useNavigate } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
-import { getDoc, doc, updateDoc } from 'firebase/firestore';
-import { auth, db } from '../../Config/Firebase';
-import { toast } from 'react-toastify';
-import upload from '../../lib/Upload';
+import React, { useEffect, useState } from "react";
+import "./ProfileUpdate.css";
+import assets from "../../assets/assets";
+import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { getDoc, doc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../../Config/Firebase";
+import { toast } from "react-toastify";
+import upload from "../../lib/Upload";
 
 const ProfileUpdate = () => {
   const [image, setImage] = useState(null);
-  const [name, setName] = useState('');
-  const [bio, setBio] = useState('');
-  const [uid, setUid] = useState('');
-  const [previmg, setPrevimg] = useState('');
+  const [name, setName] = useState("");
+  const [bio, setBio] = useState("");
+  const [uid, setUid] = useState("");
+  const [previmg, setPrevimg] = useState("");
   const navigate = useNavigate();
 
   const profileUpdate = async (event) => {
     event.preventDefault();
     if (!previmg && !image) {
-      toast.error('Please upload a profile image');
-      return; 
+      toast.error("Please upload a profile image");
+      return;
     }
 
     try {
-      const docRef = doc(db, 'users', uid);
+      const docRef = doc(db, "users", uid);
       let imgURL = previmg;
 
       if (image) {
-        imgURL = await upload(image); // base64 string
+        imgURL = await upload(image);
         setPrevimg(imgURL);
       }
 
@@ -38,10 +38,10 @@ const ProfileUpdate = () => {
         bio,
       });
 
-      toast.success('Profile updated successfully!');
-      navigate('/chat');
+      toast.success("Profile updated successfully!");
+      navigate("/chat");
     } catch (error) {
-      toast.error('Error updating profile: ' + error.message);
+      toast.error("Error updating profile: " + error.message);
     }
   };
 
@@ -49,7 +49,7 @@ const ProfileUpdate = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUid(user.uid);
-        const docRef = doc(db, 'users', user.uid);
+        const docRef = doc(db, "users", user.uid);
         const docsnap = await getDoc(docRef);
         const data = docsnap.data() || {};
 
@@ -57,14 +57,13 @@ const ProfileUpdate = () => {
         if (data.bio) setBio(data.bio);
         if (data.avatar) setPrevimg(data.avatar);
       } else {
-        navigate('/');
+        navigate("/");
       }
     });
 
     return () => unsubscribe();
   }, [navigate]);
 
-  // Cleanup object URLs
   useEffect(() => {
     return () => {
       if (image) URL.revokeObjectURL(image);
@@ -72,43 +71,49 @@ const ProfileUpdate = () => {
   }, [image]);
 
   return (
-    <div className='profile'>
-      <div className='profilecontainer'>
+    <div className="profile">
+      <div className="profilecontainer">
         <form onSubmit={profileUpdate}>
           <h3>Update Details</h3>
-          <label htmlFor='avatar'>
+          <label htmlFor="avatar">
             <input
-              type='file'
-              id='avatar'
-              accept='.jpg,.png,.jpeg,.pdf'
+              type="file"
+              id="avatar"
+              accept=".jpg,.png,.jpeg,.pdf"
               hidden
               onChange={(e) => setImage(e.target.files[0])}
             />
             <img
-              src={image ? URL.createObjectURL(image) : previmg ? previmg : assets.avatar_icon}
-              alt='avatar'
+              src={
+                image
+                  ? URL.createObjectURL(image)
+                  : previmg
+                  ? previmg
+                  : assets.avatar_icon
+              }
+              alt="avatar"
             />
             Upload Profile Image
           </label>
           <input
-            type='text'
-            placeholder='Your Name'
+            type="text"
+            placeholder="Your Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
           <textarea
-            placeholder='Write profile bio'
+            placeholder="Write profile bio"
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             required
           />
-          <button type='submit'>Save</button>
+          <button type="submit">Save</button>
         </form>
         <img
-          className='profilepic'
+          className="profilepic"
           src={image ? URL.createObjectURL(image) : previmg || assets.logo_icon}
-          alt='profile'
+          alt="profile"
         />
       </div>
     </div>

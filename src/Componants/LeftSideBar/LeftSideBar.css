@@ -1,55 +1,54 @@
-.ls{
+.ls {
   background: #001030;
   color: white;
   height: 75vh;
 }
-.lstop{
+.lstop {
   padding: 20px;
 }
-.lsnav{
+.lsnav {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.lsnav .logo{
+.lsnav .logo {
   max-width: 140px;
 }
-.lsnav .menu img{
-max-height: 20px;
-opacity: 0.6;
-cursor: pointer;
+.lsnav .menu img {
+  max-height: 20px;
+  opacity: 0.6;
+  cursor: pointer;
 }
-.lssearch{
- background: #002670;
- display: flex;
- align-items: center;
- gap: 10px;
- padding: 10px 12px;
- margin-top: 20px;
+.lssearch {
+  background: #002670;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-top: 20px;
 }
-.lssearch img{
+.lssearch img {
   max-width: 16px;
 }
-.lssearch input{
+.lssearch input {
   background: transparent;
   border: none;
   outline: none;
   color: white;
   width: 100%;
 }
-.lslist{
+.lslist {
   display: flex;
   flex-direction: column;
   height: 70%;
   overflow-y: scroll;
-
 }
-.friends img{
+.friends img {
   width: 35px;
   aspect-ratio: 1/1;
   border-radius: 50%;
 }
-.friends{
+.friends {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -57,25 +56,25 @@ cursor: pointer;
   cursor: pointer;
   font-size: 13px;
 }
-.friends div{
+.friends div {
   display: flex;
   flex-direction: column;
 }
-.friends span{
+.friends span {
   color: #9f9f9f;
   font-size: 11px;
 }
-.friends:hover{
-  background: #077EFF;
+.friends:hover {
+  background: #077eff;
 }
-.friends:hover span{
+.friends:hover span {
   color: white;
 }
-.lsnav .menu{
+.lsnav .menu {
   position: relative;
   padding: 10px 0px;
 }
-.menu .submenu{
+.menu .submenu {
   position: absolute;
   top: 100%;
   right: 0px;
@@ -86,16 +85,28 @@ cursor: pointer;
   color: black;
   display: none;
 }
-.submenu hr{
+.submenu hr {
   border: none;
   height: 2px;
   background-color: #a4a4a4;
   margin: 8px 0px;
 }
-.submenu p{
+.submenu p {
   font-size: 14px;
   cursor: pointer;
 }
-.menu:hover .submenu{
+.menu:hover .submenu {
   display: block;
+}
+.friends.border img {
+  border: 3px solid #07fff3;
+}
+.friends.border div span {
+  color: #07fff3;
+}
+
+@media (max-width: 900px) {
+  .ls {
+    width: 100%;
+  }
 }

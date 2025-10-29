@@ -8,17 +8,20 @@ export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
   const [userData, setUserData] = useState(null);
-  const [chatdata, setChatData] = useState(null);
+  const [chatData, setChatData] = useState(null);
   const navigate = useNavigate();
-
+  const [messageId, setMessageId] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [chatUser, setChatUser] = useState(null);
+  const [chatVisible, setChatVisible] = useState(false);
   const loaduserdata = async (uid) => {
     try {
       const userRef = doc(db, "users", uid);
       const userSnap = await getDoc(userRef);
-      const userData = userSnap.data();
-      setUserData(userData);
+      const data = userSnap.data();
+      setUserData({ ...data, id: uid });
 
-      if (userData.avatar && userData.name) {
+      if (data.avatar && data.name) {
         navigate("/Chat");
       } else {
         navigate("/Profile");
@@ -40,33 +43,54 @@ const AppContextProvider = (props) => {
 
   useEffect(() => {
     if (userData) {
-      const chatRef = doc(db, 'chats', userData.id);
+      const chatRef = doc(db, "chats", userData.id);
       const unSub = onSnapshot(chatRef, async (res) => {
         const chatItems = res.data()?.chatsData || [];
-        const tempdata = [];
+        const tempData = [];
         for (const item of chatItems) {
-          const userRef = doc(db, 'users', item.rId);
+          const userRef = doc(db, "users", item.rId);
           const userSnap = await getDoc(userRef);
-          const userData = userSnap.data();
-          tempdata.push({ ...item, userData });
+          tempData.push({ ...item, userData: userSnap.data() });
         }
-        setChatData(tempdata.sort((a,b)=>b.updatedAt - a.updatedAt));
+        setChatData(tempData.sort((a, b) => b.updatedAt - a.updatedAt));
       });
 
       return () => unSub();
     }
   }, [userData]);
-
   const value = {
     userData,
     setUserData,
-    chatdata,
+    chatData,
     setChatData,
     loaduserdata,
+    messages,
+    setMessages,
+    messageId,
+    setMessageId,
+    chatUser,
+    setChatUser,
+    chatVisible,
+    setChatVisible,
   };
-
   return (
-    <AppContext.Provider value={value}>
+    <AppContext.Provider
+      value={{
+        userData,
+        setUserData,
+        chatData,
+        setChatData,
+        loaduserdata,
+        messages,
+        setMessages,
+        messageId,
+        setMessageId,
+        chatUser,
+        setChatUser,
+        chatVisible,
+        setChatVisible,
+      }}
+    >
       {props.children}
     </AppContext.Provider>
   );

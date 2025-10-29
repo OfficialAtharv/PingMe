@@ -1,14 +1,43 @@
-.chat{
+.chat {
   min-height: 100vh;
-  background:linear-gradient(#596AFF,#383699);
+  background: linear-gradient(#596aff, #383699);
   display: grid;
   place-items: center;
 }
-.chatcontainer{
+.chatcontainer {
   width: 95%;
   height: 75vh;
   max-width: 1000px;
-  background-color:aliceblue;
+  background-color: aliceblue;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
+}
+.loading {
+  font-size: 50px;
+  color: white;
+}
+.chatwelcome {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.chatwelcome img {
+  width: 60px;
+}
+.chatwelcome p {
+  font-size: 20px;
+  font-weight: 500;
+  color: #383838;
+}
+
+@media (max-width: 900px) {
+  .chatcontainer {
+    display: flex;
+  }
+  .loading {
+    font-size: 30px;
+  }
 }
